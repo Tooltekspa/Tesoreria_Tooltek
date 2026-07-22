@@ -425,11 +425,11 @@ function renderTabla(){
     <tr class="fila s-${c.categoria}" data-idx="${i}">
       <td><div class="nomCli">${esc(c.nombre)}</div><div class="rutCli">${esc(c.rut)} ${pills}</div></td>
       <td>${esc(c.vendedor)||'—'}</td>
-      <td class="num">${c.totalVencido?CLP(c.totalVencido):'—'}</td>
+      <td class="num">${c.totalVencido>0?CLP(c.totalVencido):'—'}</td>
       <td class="num">${c.maxDiasVencido||0}</td>
       <td class="num">${c.cheques.length||''}</td>
-      <td class="num" style="${c.montoProtestado?'color:var(--rojo);font-weight:600':''}">${c.montoProtestado?CLP(c.montoProtestado):'—'}</td>
-      <td class="num" style="font-weight:700">${c.exposicionTotal?CLP(c.exposicionTotal):'—'}</td>
+      <td class="num" style="${c.montoProtestado>0?'color:var(--rojo);font-weight:600':''}">${c.montoProtestado>0?CLP(c.montoProtestado):'—'}</td>
+      <td class="num" style="font-weight:700">${c.exposicionTotal>0?CLP(c.exposicionTotal):'—'}</td>
       <td class="num" style="${c.creditoConcedido>0&&c.lineaDisponible<=0?'color:var(--rojo)':''}">${c.creditoConcedido?CLP(c.lineaDisponible):'—'}</td>
     </tr>`;
   }).join('') : '<tr><td colspan="8" class="vacio" style="padding:24px">Sin resultados para los filtros aplicados.</td></tr>';
@@ -455,16 +455,17 @@ function abrirModal(c){
 
   const kpis = `
     <div class="modKpis">
-      <div class="modKpi"><div class="et">Deuda vencida</div><div class="val">${CLP(c.totalVencido)}</div></div>
-      <div class="modKpi rojo"><div class="et">Cheques protestados</div><div class="val">${c.montoProtestado?CLP(c.montoProtestado):'$0'}</div></div>
-      <div class="modKpi acento"><div class="et">Exposición total</div><div class="val">${CLP(c.exposicionTotal)}</div></div>
+      <div class="modKpi"><div class="et">Deuda vencida</div><div class="val">${c.totalVencido>0?CLP(c.totalVencido):'—'}</div></div>
+      <div class="modKpi rojo"><div class="et">Cheques protestados</div><div class="val">${c.montoProtestado>0?CLP(c.montoProtestado):'—'}</div></div>
+      <div class="modKpi acento"><div class="et">Exposición total</div><div class="val">${c.exposicionTotal>0?CLP(c.exposicionTotal):'—'}</div></div>
       <div class="modKpi"><div class="et">Días máx. vencido</div><div class="val">${c.maxDiasVencido||0}</div></div>
       <div class="modKpi ${c.creditoConcedido>0&&c.lineaDisponible<=0?'rojo':''}"><div class="et">Línea disponible</div><div class="val">${c.creditoConcedido?CLP(c.lineaDisponible):'—'}</div></div>
     </div>`;
 
-  const docs = c.documentos.length ? `
+  const docsPos = c.documentos.filter(d => (Number(d.monto)||0) > 0);
+  const docs = docsPos.length ? `
     <div class="tablaWrap"><table><thead><tr><th>Documento</th><th>Vencimiento</th><th class="num">Monto</th><th class="num">Días</th></tr></thead><tbody>
-    ${c.documentos.map(d=>`<tr><td>${esc(d.documento)}</td><td>${esc(d.vencimiento)}</td><td class="num">${CLP(d.monto)}</td><td class="num">${d.diasVencido}</td></tr>`).join('')}
+    ${docsPos.map(d=>`<tr><td>${esc(d.documento)}</td><td>${esc(d.vencimiento)}</td><td class="num">${CLP(d.monto)}</td><td class="num">${d.diasVencido}</td></tr>`).join('')}
     </tbody></table></div>` : '<div class="vacio">Sin facturas vencidas en la planilla de deuda.</div>';
 
   const chs = c.cheques.length ? `
@@ -486,7 +487,7 @@ function abrirModal(c){
     ? `<div class="comentario"><b>Comentario de cobranza:</b> ${esc(c.comentarioCobranza)}</div>` : '';
 
   $('#modCuerpo').innerHTML = contacto + kpis + `<div class="detGrid">
-    <div class="detBloque"><h4>Facturas vencidas (${c.documentos.length})</h4>${docs}</div>
+    <div class="detBloque"><h4>Facturas vencidas (${docsPos.length})</h4>${docs}</div>
     <div class="detBloque"><h4>Cheques protestados (${c.cheques.length})</h4>${chs}</div>
     ${coment}
   </div>`;
