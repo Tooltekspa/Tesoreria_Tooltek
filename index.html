@@ -10,6 +10,14 @@
     --linea:#DDE3E8; --acento:#0081B0; --acento-osc:#25638F; --celeste:#91CADE;
     --rojo:#C62828; --rojo-bg:#FBEAEA; --ambar:#B47D00; --ambar-bg:#FBF3DF;
     --verde:#2E7D32; --verde-bg:#E8F3E9;
+    /* Categorías de cartera (leyenda Resumen) */
+    --c-hasta30:#EF6C00;   --c-hasta30-bg:#FDEBD9;
+    --c-31a60:#C9A400;     --c-31a60-bg:#FBF3CF;
+    --c-mayor60:#D32F2F;   --c-mayor60-bg:#FBEAEA;
+    --c-conplazo:#2E7D32;  --c-conplazo-bg:#E8F3E9;
+    --c-vencehoy:#1565C0;  --c-vencehoy-bg:#E3EDFA;
+    --c-castigada:#37474F; --c-castigada-bg:#E2E6E9;
+    --c-sindeuda:#90A4AE;  --c-sindeuda-bg:#F1F4F6;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--fondo);color:var(--tinta);font-size:14px}
@@ -54,11 +62,21 @@
   .filtros{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
   .filtros input[type=text],.filtros select{padding:9px 12px;border:1px solid var(--linea);border-radius:8px;font-size:13px;background:var(--panel)}
   .filtros input[type=text]{min-width:230px}
-  .chip{padding:7px 13px;border-radius:20px;border:1px solid var(--linea);background:var(--panel);font-size:13px;cursor:pointer;user-select:none}
-  .chip.act-rojo{background:var(--rojo-bg);border-color:var(--rojo);color:var(--rojo);font-weight:600}
-  .chip.act-amarillo{background:var(--ambar-bg);border-color:var(--ambar);color:var(--ambar);font-weight:600}
-  .chip.act-verde{background:var(--verde-bg);border-color:var(--verde);color:var(--verde);font-weight:600}
-  .chip.act-todos{background:var(--tinta);border-color:var(--tinta);color:#fff;font-weight:600}
+  .chip{padding:7px 13px;border-radius:20px;border:1px solid var(--linea);background:var(--panel);font-size:13px;cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:6px}
+  .chip .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+  .chip.act{font-weight:700}
+  .chip.act[data-cat=""]{background:var(--tinta);border-color:var(--tinta);color:#fff}
+  .chip.act[data-cat="hasta30"]{background:var(--c-hasta30-bg);border-color:var(--c-hasta30);color:var(--c-hasta30)}
+  .chip.act[data-cat="31a60"]{background:var(--c-31a60-bg);border-color:var(--c-31a60);color:#8A6D00}
+  .chip.act[data-cat="mayor60"]{background:var(--c-mayor60-bg);border-color:var(--c-mayor60);color:var(--c-mayor60)}
+  .chip.act[data-cat="conplazo"]{background:var(--c-conplazo-bg);border-color:var(--c-conplazo);color:var(--c-conplazo)}
+  .chip.act[data-cat="vencehoy"]{background:var(--c-vencehoy-bg);border-color:var(--c-vencehoy);color:var(--c-vencehoy)}
+  .chip.act[data-cat="castigada"]{background:var(--c-castigada-bg);border-color:var(--c-castigada);color:var(--c-castigada)}
+  .chip.act[data-cat="sindeuda"]{background:var(--c-sindeuda-bg);border-color:var(--c-sindeuda);color:#5B6E78}
+  .dot.hasta30{background:var(--c-hasta30)} .dot.c31a60{background:var(--c-31a60)}
+  .dot.mayor60{background:var(--c-mayor60)} .dot.conplazo{background:var(--c-conplazo)}
+  .dot.vencehoy{background:var(--c-vencehoy)} .dot.castigada{background:var(--c-castigada)}
+  .dot.sindeuda{background:var(--c-sindeuda)}
   label.chk{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer}
 
   /* Pestañas */
@@ -76,9 +94,19 @@
   tr.fila{cursor:pointer}
   tr.fila:hover td{background:#F6FAFB}
   tr.fila td:first-child{border-left:4px solid transparent}
-  tr.s-rojo td:first-child{border-left-color:var(--rojo)}
-  tr.s-amarillo td:first-child{border-left-color:var(--ambar)}
-  tr.s-verde td:first-child{border-left-color:var(--verde)}
+  tr.s-hasta30 td:first-child{border-left-color:var(--c-hasta30)}
+  tr.s-31a60 td:first-child{border-left-color:var(--c-31a60)}
+  tr.s-mayor60 td:first-child{border-left-color:var(--c-mayor60)}
+  tr.s-conplazo td:first-child{border-left-color:var(--c-conplazo)}
+  tr.s-vencehoy td:first-child{border-left-color:var(--c-vencehoy)}
+  tr.s-castigada td:first-child{border-left-color:var(--c-castigada)}
+  tr.s-sindeuda td:first-child{border-left-color:var(--c-sindeuda)}
+  tr.s-castigada td{background:#F4F6F7}
+  .pill.cat{color:#fff}
+  .pill.cat.hasta30{background:var(--c-hasta30)} .pill.cat.c31a60{background:var(--c-31a60)}
+  .pill.cat.mayor60{background:var(--c-mayor60)} .pill.cat.conplazo{background:var(--c-conplazo)}
+  .pill.cat.vencehoy{background:var(--c-vencehoy)} .pill.cat.castigada{background:var(--c-castigada)}
+  .pill.cat.sindeuda{background:var(--c-sindeuda)}
   .nomCli{font-weight:600}
   .rutCli{font-size:12px;color:var(--tinta2)}
   .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:10px}
@@ -96,7 +124,10 @@
   .modalCabecera h2{font-size:17px;line-height:1.3;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .modalCabecera .rutMod{font-size:13px;color:var(--tinta2);margin-top:2px}
   .semDot{display:inline-block;width:11px;height:11px;border-radius:50%;flex-shrink:0}
-  .semDot.rojo{background:var(--rojo)} .semDot.amarillo{background:var(--ambar)} .semDot.verde{background:var(--verde)}
+  .semDot.hasta30{background:var(--c-hasta30)} .semDot.c31a60{background:var(--c-31a60)}
+  .semDot.mayor60{background:var(--c-mayor60)} .semDot.conplazo{background:var(--c-conplazo)}
+  .semDot.vencehoy{background:var(--c-vencehoy)} .semDot.castigada{background:var(--c-castigada)}
+  .semDot.sindeuda{background:var(--c-sindeuda)}
   .btnCerrar{background:none;border:none;font-size:22px;line-height:1;color:var(--tinta2);cursor:pointer;padding:4px 8px;border-radius:6px}
   .btnCerrar:hover{background:var(--fondo);color:var(--tinta)}
   .modalCuerpo{padding:18px 22px 24px;overflow:auto}
@@ -161,7 +192,7 @@
         <div class="kpi acento"><div class="et">Exposición total</div><div class="val" id="kExposicion">—</div></div>
         <div class="kpi"><div class="et">Clientes con deuda</div><div class="val" id="kConDeuda">—</div></div>
         <div class="kpi rojo"><div class="et">Con protestos</div><div class="val" id="kConProtestos">—</div></div>
-        <div class="kpi"><div class="et">En rojo</div><div class="val" id="kRojo">—</div></div>
+        <div class="kpi rojo"><div class="et">Vencida &gt; 60 días</div><div class="val" id="kRojo">—</div></div>
       </div>
 
       <div class="aviso" id="avisoProbables"></div>
@@ -175,11 +206,17 @@
         <div class="filtros">
           <input type="text" id="fBuscar" placeholder="Buscar por nombre o RUT…">
           <select id="fVendedor"><option value="">Todos los vendedores</option></select>
-          <span class="chip act-todos" data-sem="">Todos</span>
-          <span class="chip" data-sem="rojo">Rojo</span>
-          <span class="chip" data-sem="amarillo">Amarillo</span>
-          <span class="chip" data-sem="verde">Verde</span>
           <label class="chk"><input type="checkbox" id="fSoloCheques"> Solo con protestos</label>
+        </div>
+        <div class="filtros">
+          <span class="chip act" data-cat="">Todos</span>
+          <span class="chip" data-cat="hasta30"><span class="dot hasta30"></span>Vencida hasta 30 días</span>
+          <span class="chip" data-cat="31a60"><span class="dot c31a60"></span>Vencida 31 a 60 días</span>
+          <span class="chip" data-cat="mayor60"><span class="dot mayor60"></span>Vencida mayor a 60 días</span>
+          <span class="chip" data-cat="conplazo"><span class="dot conplazo"></span>Con plazo para pago</span>
+          <span class="chip" data-cat="vencehoy"><span class="dot vencehoy"></span>Vence hoy / NC / saldo</span>
+          <span class="chip" data-cat="castigada"><span class="dot castigada"></span>Castigada</span>
+          <span class="chip" data-cat="sindeuda"><span class="dot sindeuda"></span>Sin deuda</span>
         </div>
 
         <div class="tablaWrap">
@@ -230,7 +267,33 @@ const URL_GAS = 'https://script.google.com/macros/s/AKfycbw2h0JtLPs5zJo7akNNx3RM
 
 /* ================== ESTADO ================== */
 let DATA = null;
-let filtro = { texto:'', vendedor:'', semaforo:'', soloCheques:false };
+let filtro = { texto:'', vendedor:'', categoria:'', soloCheques:false };
+
+/* Categorías de cartera (leyenda Resumen) */
+const CATS = {
+  hasta30:   { clase:'hasta30',   etiqueta:'Vencida hasta 30 días' },
+  '31a60':   { clase:'c31a60',    etiqueta:'Vencida 31 a 60 días' },
+  mayor60:   { clase:'mayor60',   etiqueta:'Vencida mayor a 60 días' },
+  conplazo:  { clase:'conplazo',  etiqueta:'Con plazo para pago' },
+  vencehoy:  { clase:'vencehoy',  etiqueta:'Vence hoy / NC / saldo' },
+  castigada: { clase:'castigada', etiqueta:'Castigada' },
+  sindeuda:  { clase:'sindeuda',  etiqueta:'Sin deuda' }
+};
+
+function categoriaCliente(c){
+  // Castigada: marcada desde el backend o en el comentario de cobranza
+  if(c.castigada === true || /castigad/i.test(String(c.estado||'')) || /castigad/i.test(String(c.comentarioCobranza||''))) return 'castigada';
+  const docs = c.documentos || [];
+  const dias = docs.map(d => Number(d.diasVencido)||0);
+  const maxDias = dias.length ? Math.max(...dias) : (Number(c.maxDiasVencido)||0);
+  if(maxDias > 60)  return 'mayor60';
+  if(maxDias > 30)  return '31a60';
+  if(maxDias >= 1)  return 'hasta30';
+  if(dias.some(d => d === 0) && docs.length) return 'vencehoy';   // vence hoy / NC / saldo
+  if(dias.some(d => d < 0)) return 'conplazo';                     // documentos aún dentro de plazo
+  if(docs.length) return 'vencehoy';                               // docs sin días: saldo/NC
+  return 'sindeuda';                                               // sin documentos ni deuda
+}
 
 const $ = s => document.querySelector(s);
 const CLP = v => '$' + Math.round(v||0).toLocaleString('es-CL');
@@ -288,6 +351,14 @@ async function cargar(){
     const r = await fetch(URL_GAS + '?action=consolidado&key=' + llave()).then(x=>x.json());
     if(!r.ok) throw new Error(r.error||'Error');
     DATA = r.data;
+    // Normalizar y clasificar cada cliente según la leyenda Resumen
+    DATA.clientes.forEach(c => {
+      c.documentos = c.documentos || [];
+      c.cheques = c.cheques || [];
+      c.categoria = categoriaCliente(c);
+    });
+    // Mayor exposición primero; clientes sin deuda al final
+    DATA.clientes.sort((a,b) => (b.exposicionTotal||0) - (a.exposicionTotal||0) || a.nombre.localeCompare(b.nombre));
     render();
   }catch(e){
     $('#estado').textContent = 'No se pudieron cargar los datos: ' + e.message + '. Reintenta con "Actualizar".';
@@ -297,12 +368,14 @@ async function cargar(){
 /* ================== RENDER ================== */
 function render(){
   const R = DATA.resumen;
+  const nMayor60 = DATA.clientes.filter(c=>c.categoria==='mayor60').length;
+  const nCastigadas = DATA.clientes.filter(c=>c.categoria==='castigada').length;
   $('#kVencido').textContent    = CLP(R.totalVencido);
   $('#kProtestado').textContent = CLP(R.totalProtestado);
   $('#kExposicion').textContent = CLP(R.exposicionTotal);
   $('#kConDeuda').textContent   = R.clientesConDeuda;
   $('#kConProtestos').textContent = R.clientesConProtestos;
-  $('#kRojo').textContent       = R.clientesRojo;
+  $('#kRojo').textContent       = nMayor60 + (nCastigadas ? ' + ' + nCastigadas + ' cast.' : '');
   $('#fechaGen').textContent    = 'Actualizado: ' + new Date(DATA.generado).toLocaleString('es-CL');
 
   if(R.matchesProbables > 0){
@@ -336,25 +409,27 @@ function renderTabla(){
   const filas = DATA.clientes.filter(c=>{
     if(t && !(c.nombre.toLowerCase().includes(t) || c.rut.toLowerCase().includes(t))) return false;
     if(filtro.vendedor && c.vendedor !== filtro.vendedor) return false;
-    if(filtro.semaforo && c.semaforo !== filtro.semaforo) return false;
+    if(filtro.categoria && c.categoria !== filtro.categoria) return false;
     if(filtro.soloCheques && c.cheques.length === 0) return false;
     return true;
   });
 
   $('#cuerpoTabla').innerHTML = filas.length ? filas.map((c,i)=>{
+    const cat = CATS[c.categoria] || CATS.sindeuda;
     const pills =
+      `<span class="pill cat ${cat.clase}">${cat.etiqueta}</span> ` +
       (c.tipoMatch==='probable' ? '<span class="pill probable">match probable</span> ' : '') +
       (c.tipoMatch==='solo cheques' ? '<span class="pill solocheq">solo cheques</span> ' : '') +
       (c.cheques.length ? `<span class="pill rojo">${c.cheques.length} protesto${c.cheques.length>1?'s':''}</span>` : '');
     return `
-    <tr class="fila s-${c.semaforo}" data-idx="${i}">
+    <tr class="fila s-${c.categoria}" data-idx="${i}">
       <td><div class="nomCli">${esc(c.nombre)}</div><div class="rutCli">${esc(c.rut)} ${pills}</div></td>
       <td>${esc(c.vendedor)||'—'}</td>
-      <td class="num">${CLP(c.totalVencido)}</td>
+      <td class="num">${c.totalVencido?CLP(c.totalVencido):'—'}</td>
       <td class="num">${c.maxDiasVencido||0}</td>
       <td class="num">${c.cheques.length||''}</td>
       <td class="num" style="${c.montoProtestado?'color:var(--rojo);font-weight:600':''}">${c.montoProtestado?CLP(c.montoProtestado):'—'}</td>
-      <td class="num" style="font-weight:700">${CLP(c.exposicionTotal)}</td>
+      <td class="num" style="font-weight:700">${c.exposicionTotal?CLP(c.exposicionTotal):'—'}</td>
       <td class="num" style="${c.creditoConcedido>0&&c.lineaDisponible<=0?'color:var(--rojo)':''}">${c.creditoConcedido?CLP(c.lineaDisponible):'—'}</td>
     </tr>`;
   }).join('') : '<tr><td colspan="8" class="vacio" style="padding:24px">Sin resultados para los filtros aplicados.</td></tr>';
@@ -369,11 +444,13 @@ function renderTabla(){
 
 /* ================== MODAL DETALLE ================== */
 function abrirModal(c){
+  const cat = CATS[c.categoria] || CATS.sindeuda;
   const pills =
-    (c.tipoMatch==='probable' ? '<span class="pill probable">match probable</span>' : '') +
-    (c.tipoMatch==='solo cheques' ? '<span class="pill solocheq">solo cheques</span>' : '');
+    `<span class="pill cat ${cat.clase}">${cat.etiqueta}</span>` +
+    (c.tipoMatch==='probable' ? ' <span class="pill probable">match probable</span>' : '') +
+    (c.tipoMatch==='solo cheques' ? ' <span class="pill solocheq">solo cheques</span>' : '');
 
-  $('#modNombre').innerHTML = `<span class="semDot ${esc(c.semaforo)}"></span>${esc(c.nombre)} ${pills}`;
+  $('#modNombre').innerHTML = `<span class="semDot ${cat.clase}"></span>${esc(c.nombre)} ${pills}`;
   $('#modRut').textContent = c.rut + (c.vendedor ? ' · Vendedor: ' + c.vendedor : '');
 
   const kpis = `
@@ -433,9 +510,9 @@ $('#fVendedor').addEventListener('change', e=>{ filtro.vendedor=e.target.value; 
 $('#fSoloCheques').addEventListener('change', e=>{ filtro.soloCheques=e.target.checked; renderTabla(); });
 document.querySelectorAll('.chip').forEach(ch=>{
   ch.addEventListener('click', ()=>{
-    filtro.semaforo = ch.dataset.sem;
-    document.querySelectorAll('.chip').forEach(x=>x.className='chip');
-    ch.classList.add(ch.dataset.sem ? 'act-'+ch.dataset.sem : 'act-todos');
+    filtro.categoria = ch.dataset.cat;
+    document.querySelectorAll('.chip').forEach(x=>x.classList.remove('act'));
+    ch.classList.add('act');
     renderTabla();
   });
 });
@@ -451,11 +528,11 @@ document.querySelectorAll('.tab').forEach(tb=>{
 /* ================== EXPORT CSV ================== */
 $('#btnCSV').addEventListener('click', ()=>{
   if(!DATA) return;
-  const enc = ['RUT','Cliente','Vendedor','Deuda vencida','Dias max','Cheques','Monto protestado','Exposicion total','Credito concedido','Linea disponible','Semaforo','Tipo match','Comentario cobranza'];
+  const enc = ['RUT','Cliente','Vendedor','Deuda vencida','Dias max','Cheques','Monto protestado','Exposicion total','Credito concedido','Linea disponible','Categoria','Tipo match','Comentario cobranza'];
   const filas = DATA.clientes.map(c=>[
     c.rut, c.nombre, c.vendedor, c.totalVencido, c.maxDiasVencido, c.cheques.length,
     c.montoProtestado, c.exposicionTotal, c.creditoConcedido, c.lineaDisponible,
-    c.semaforo, c.tipoMatch, (c.comentarioCobranza||'').replace(/\s+/g,' ')
+    (CATS[c.categoria]||CATS.sindeuda).etiqueta, c.tipoMatch, (c.comentarioCobranza||'').replace(/\s+/g,' ')
   ]);
   const csv = [enc, ...filas].map(f=>f.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(';')).join('\r\n');
   const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
