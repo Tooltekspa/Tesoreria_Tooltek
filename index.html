@@ -130,6 +130,8 @@
   .semDot.sindeuda{background:var(--c-sindeuda)}
   .btnCerrar{background:none;border:none;font-size:22px;line-height:1;color:var(--tinta2);cursor:pointer;padding:4px 8px;border-radius:6px}
   .btnCerrar:hover{background:var(--fondo);color:var(--tinta)}
+  .btnSec{background:var(--panel);border:1px solid var(--acento);color:var(--acento-osc);font-weight:600;font-size:13px;padding:9px 22px;border-radius:8px;cursor:pointer}
+  .btnSec:hover{background:var(--c-vencehoy-bg)}
   .modalCuerpo{padding:18px 22px 24px;overflow:auto}
   .modKpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px}
   .modKpi{background:var(--fondo);border:1px solid var(--linea);border-radius:9px;padding:10px 12px}
@@ -404,6 +406,11 @@ function render(){
   $('#contenido').style.display='block';
 }
 
+/* Paginación: renderizar solo un tramo de filas para no saturar el DOM */
+const PAGINA_INICIAL = 100, PAGINA_PASO = 200;
+let limiteFilas = PAGINA_INICIAL;
+let FILAS_VISIBLES = [];
+
 function renderTabla(){
   const t = filtro.texto.toLowerCase();
   const filas = DATA.clientes.filter(c=>{
@@ -414,7 +421,10 @@ function renderTabla(){
     return true;
   });
 
-  $('#cuerpoTabla').innerHTML = filas.length ? filas.map((c,i)=>{
+  FILAS_VISIBLES = filas.slice(0, limiteFilas);
+  const restantes = filas.length - FILAS_VISIBLES.length;
+
+  let html = FILAS_VISIBLES.length ? FILAS_VISIBLES.map((c,i)=>{
     const cat = CATS[c.categoria] || CATS.sindeuda;
     const pills =
       `<span class="pill cat ${cat.clase}">${cat.etiqueta}</span> ` +
@@ -434,13 +444,26 @@ function renderTabla(){
     </tr>`;
   }).join('') : '<tr><td colspan="8" class="vacio" style="padding:24px">Sin resultados para los filtros aplicados.</td></tr>';
 
-  document.querySelectorAll('tr.fila').forEach(tr=>{
-    tr.addEventListener('click', ()=>{
-      const c = filas[Number(tr.dataset.idx)];
-      if(c) abrirModal(c);
-    });
-  });
+  if(restantes > 0){
+    html += `<tr><td colspan="8" style="text-align:center;padding:14px">
+      <button class="btnSec" id="btnMasFilas">Mostrar ${Math.min(PAGINA_PASO, restantes)} más (quedan ${restantes} de ${filas.length})</button>
+    </td></tr>`;
+  }
+  $('#cuerpoTabla').innerHTML = html;
 }
+
+/* Delegación: un solo listener para toda la tabla (clic en fila o en "mostrar más") */
+$('#cuerpoTabla').addEventListener('click', e=>{
+  if(e.target && e.target.id === 'btnMasFilas'){
+    limiteFilas += PAGINA_PASO;
+    renderTabla();
+    return;
+  }
+  const tr = e.target.closest('tr.fila');
+  if(!tr) return;
+  const c = FILAS_VISIBLES[Number(tr.dataset.idx)];
+  if(c) abrirModal(c);
+});
 
 /* ================== MODAL DETALLE ================== */
 function abrirModal(c){
@@ -506,15 +529,22 @@ $('#modalFondo').addEventListener('click', e => { if(e.target === $('#modalFondo
 document.addEventListener('keydown', e => { if(e.key === 'Escape') cerrarModal(); });
 
 /* ================== FILTROS Y TABS ================== */
-$('#fBuscar').addEventListener('input', e=>{ filtro.texto=e.target.value; renderTabla(); });
-$('#fVendedor').addEventListener('change', e=>{ filtro.vendedor=e.target.value; renderTabla(); });
-$('#fSoloCheques').addEventListener('change', e=>{ filtro.soloCheques=e.target.checked; renderTabla(); });
+function aplicarFiltro(){ limiteFilas = PAGINA_INICIAL; renderTabla(); }
+
+let tBusqueda = null;
+$('#fBuscar').addEventListener('input', e=>{
+  filtro.texto = e.target.value;
+  clearTimeout(tBusqueda);
+  tBusqueda = setTimeout(aplicarFiltro, 250); // debounce: no re-renderizar en cada tecla
+});
+$('#fVendedor').addEventListener('change', e=>{ filtro.vendedor=e.target.value; aplicarFiltro(); });
+$('#fSoloCheques').addEventListener('change', e=>{ filtro.soloCheques=e.target.checked; aplicarFiltro(); });
 document.querySelectorAll('.chip').forEach(ch=>{
   ch.addEventListener('click', ()=>{
     filtro.categoria = ch.dataset.cat;
     document.querySelectorAll('.chip').forEach(x=>x.classList.remove('act'));
     ch.classList.add('act');
-    renderTabla();
+    aplicarFiltro();
   });
 });
 document.querySelectorAll('.tab').forEach(tb=>{
